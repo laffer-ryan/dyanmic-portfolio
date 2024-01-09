@@ -5,10 +5,10 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user_id = models.OneToOneField(User, on_delete=models.CASCADE)
-    about = models.TextField(max_length=400)
-    age = models.IntegerField(null=True)
+    about = models.TextField(max_length=400, null=True, blank=True)
+    age = models.IntegerField(null=True, blank=True)
     university_degree = models.CharField(max_length=50) # These need to be changed to _id fields from here down
-    academic_certifications = models.CharField(max_length=50)
+    academic_certifications = models.CharField(max_length=50, null=True, blank=True)
     
     job_title = models.CharField(max_length=40, null=True, blank=True)
     activity = models.CharField(max_length=40, null=True, blank=True)
@@ -19,6 +19,10 @@ class UserProfile(models.Model):
     
 class University(models.Model):
     university_name = models.CharField(max_length=50)
+    
+    class Meta:
+        verbose_name = "University"
+        verbose_name_plural = "Universities"
     
     
 class TechnicalSkill(models.Model):
@@ -38,6 +42,7 @@ class AcademicDegree(models.Model):
     graduation_date = models.DateTimeField()
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    is_completed = models.BooleanField(default=False)
     
     class Meta:
         ordering = ['-updated', '-created']
@@ -47,11 +52,17 @@ class AcademicDegree(models.Model):
     
 class Occupation(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    job_title = models.CharField(max_length=40)
+    job_title = models.CharField(max_length=40, null=True, blank=True)
+    is_current = models.BooleanField(default=False)
     
 class Activity(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     activity = models.CharField(max_length=40, null=True, blank=True)
+    
+    
+    class Meta:
+        verbose_name = "Activity"
+        verbose_name_plural = "Activities"
     
 class CareerGoal(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
