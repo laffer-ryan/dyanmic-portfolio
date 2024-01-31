@@ -18,53 +18,53 @@
             <h1 class="text-center">About Me</h1>
             <div class="row mt-4">
                 <div class="col-lg-6">
-                    <img src="{static 'images/Me.jpg'}" class= "imageAboutPage" alt="">
+                    <img src="{{ userprofile.profile_pic.url }}" class= "imageAboutPage" alt="">
                 </div>
                 <div class="col-lg-6">
                     <p> 
-                        I am a passionate and dedicated learner, constantly seeking out new challenges and embracing the opportunity to acquire new knowledge. I have recently expanded my professional skill set, honing my expertise in Python, R, Power BI, SQL, and various other tools vital to data analysis and visualization. Building upon my foundation in statistics and my previous studies in software engineering and self studies in Data Architectures.
-
-                        I am currently pursuing a Masters Degree from Auckland University of Technology in Computer and Information Systems, prioritizing research in Data Warehouse and Big Data primarily in Amazon Web Services, along with Mobile Systems Development.
-
-                        I am open to part-time or internship positions while I complete my masters in the realm of data. Relevant disciplines would include Data Engineer, Machine Learning Engineer, Cloud Solutions and/or Data Scientist.
+                        {{ userprofile.about }}
                     </p>
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <ul>
-                                <li>Name: Ryan Lafferty</li>
-                                <li>Age: 33</li>
-                                <li>Occupation: Transitioning to Data</li>
-                                <li>Goal: Business, Data, Insights Analyst Role</li>
+                                <li>Name: {{ user.first_name }} {{ user.last_name }}</li>
+                                {% if occupations %}
+                                    
+                                <li>Occupation: {% for occupation in occupations %}
+                                    {% if occupation.is_current %}
+                                        {{ occupation.job_title }} at {{ occupation.company }}
+                                    {% endif %}
+                                    {% endfor %}
+                                </li>
+                                {% endif %}
+                                {% if careergoals %}
+                                <li>Goal: {% for goal in careergoals %}
+                                    {{ goal }}. 
+                                    {% endfor %}
+                                </li>
+                                {% endif %}
 
                             </ul>
                         </div>
                         <div class="col-md-6">
                             <ul>
-                                <li>Hiking</li>
-                                <li>Diving</li>
-                                <li>Attempting to Surf</li>
-                                <li>Never Ending Education</li>
+                                {% for activity in activities %}
+                                <li>{{ activity.activity }}</li>
+                                {% endfor %}
                             </ul>
                         </div>
                         <div class="row social-icons">
-                            <div class="col-lg-2 col-md-4 col-sm-6">
-                                <img src="{% static 'images/python-ar21.svg' %}" alt="Python" class="img-fluid">
-                            </div>
-                            <div class="col-lg-2 col-md-4 col-sm-6">
-                                <img src="{% static 'images/git-scm-ar21.svg' %}" alt="GIT" class="img-fluid">
-                            </div>
-                            <div class="col-lg-2 col-md-4 col-sm-6">
-                                <img src="{% static 'images/r-project-icon.svg' %}" alt="R Programming Language Icon" class="img-fluid">
-                            </div>
-                            <div class="col-lg-2 col-md-4 col-sm-6">
-                                <img src="{static 'images/icons8-excel-48.png' %}" alt="Microsoft Excel" class="img-fluid">
-                            </div>
-                            <div class="col-lg-2 col-md-4 col-sm-6">
-                                <img src="{static 'images/microsoft_powerbi-ar21.svg' %}" alt="Power BI" class="img-fluid">
-                            </div>
-                            <div class="col-lg-2 col-md-4 col-sm-6">
-                                <img src="{% static 'images/google_cloud-ar21.svg' %}" alt="Google Cloud" class="img-fluid">
-                            </div>
+                            {% for skill in technical_skills %}
+                                {% if skill.skill_icon and skill.top_skill %}
+                                    <div class="col-3 col-lg-2 col-md-2 col-sm-1">
+                                        <img src="{{ skill.skill_icon.url }}" alt="{{ skill.skill }}" class="img-fluid">
+                                    </div>
+                                {% else %}
+                                    <div class="col-3 col-lg-2 col-md-2 col-sm-1">
+                                        <h3> {{ skill.skill }} </h3>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -77,105 +77,12 @@
                 </div>
             </div>
     </section>
+    
     <!-- project section -->
     <section class="section" id="projects">
-        <div class="container mt-3">
+        <div class="container mt-3 mb-4">
             <h1 class="text-center">Projects</h1>
-            <div class="row">
-                <div class="col-lg-6 mt-4">
-                    <div class="card">
-                        <img class="card-img-top" src="{static 'images/autoCorr.png'}" alt="Card image" style="width:100%">
-                        <div class="card-body">
-                            <h4 class="card-title">Landslide Classification: Geospatial Analysis</h4>
-                            <p class="card-text">Landslides can cause significant damage to property and loss of life,
-                                 making their prediction an important area of research. 
-                                 This dataset provides information on various geological and environmental factors that can contribute to the
-                                  occurrence of landslides. By training a machine learning model on this dataset, 
-                                  we can develop a tool that can predict the likelihood of a landslide occurring in a given location, 
-                                  based on the features provided. Such a tool could be used by governments, emergency responders, 
-                                  and other stakeholders to better prepare for and mitigate the impact of landslides, 
-                                  potentially saving lives and reducing the economic impact of these events.</p>
-                            <div class="text-center">
-                                <a href="https://github.com/laffer-ryan/Landslide_classification" class="btn btn-success">Github</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 mt-4">
-                    <div class="card">
-                        <img class="card-img-top" src="{% static 'images/median_airbnb_listings.png' %}" alt="Card image" style="width:100%">
-                        <div class="card-body">
-                            <h4 class="card-title">AirBnB Geospatial Feature Engineering and Prediction</h4>
-                            <p class="card-text">This notebook uses geospatial feature engineering to predict the prices of Airbnb listings in New Zealand,
-                                 leveraging data from Yelp!, Open Street Maps, and geographically weighted spatial lags. The notebook creates predictive models,
-                                  including linear regression and geographically weighted regression, and evaluates them using various metrics. 
-                                  The analysis attempts to provide insights into the factors influencing Airbnb pricing
-                                 in New Zealand and demonstrates the potential of geospatial analysis for predicting real estate prices.</p>
-                            <div class="text-center">
-                                <a href="https://github.com/laffer-ryan/AirBnB_Auckland" class="btn btn-success">Github</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="row mb-4">
-                <div class="col-lg-6 mt-4">
-                    <div class="card">
-                        <img class="card-img-top" src="{% static 'static/rfm_seg_country.png' %}" alt="Card image" style="width:100%">
-                        <div class="card-body">
-                            <h4 class="card-title">Online Retail RFM Analysis</h4>
-                            <p class="card-text">For this dataset, we will be performing an RFM analysis on customer transaction data. 
-                                RFM stands for Recency, Frequency, and Monetary Value,
-                                and is a widely used customer segmentation technique that helps businesses better understand their customer base.
-                                By analyzing customers based on their recency of purchase, frequency of purchase, and total monetary value spent,
-                                businesses can gain valuable insights into which customers are most valuable, which customers are at risk of leaving,
-                                and which customers require additional attention or marketing efforts. Ultimately, 
-                                an RFM analysis can help businesses improve customer retention, increase revenue, and optimize marketing strategies.</p>
-                            <div class="text-center">
-                                <a href="https://github.com/laffer-ryan/RFM_analysis/blob/main/Online%20Retail%20Analysis%20(RFM%20Clustering).ipynb" class="btn btn-success">Github</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mt-4">
-                    <div class="card">
-                        <img class="card-img-top" src="{% static 'static/conifdence_heatmap.png' %}" alt="Card image" style="width:100%">
-                        <div class="card-body">
-                            <h4 class="card-title text-center">DataCo Market Basket Analysis</h4>
-                            <p class="card-text">A market basket analysis is effective for identifying customer behaviors. 
-                                It uses a technique called associated rule learning for Data Mining. 
-                                It involves analyzing transactional data to identify the relationships between products that are 
-                                frequently purchased together. By analyzing these associating we can recommend store layout plans to 
-                                optimizing purchasing items or to cross sell and upsell products based on what is being purchased!</p>
-                            <div class="text-center">
-                                <a href="https://github.com/laffer-ryan/Market-Basket-Analysis-/blob/main/DataCO_Market_Baskey_Analysis.ipynb" class="btn btn-success">Github</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="row mb-4">
-                <div class="col-lg-12 mt-4">
-                    <div class="card" id="capstone">
-                        <div class="card-body">
-                            <h4 class="card-title text-center">Semantic Segmentation Using Landsat Satellite Imagery</h4>
-                            <p class="card-text">For my two week capstone project, I demonstrated my new skills by collecting satellite imagery and
-                                creating a deep learning model to classify satellite imagery into specific land use categories. Semantic segmentation is a technique used in
-                                 remote sensing and computer vision to classify each pixel in an image into different classes or categories.
-                                  The application of semantic segmentation using Landsat imagery is important due to the widespread use of Landsat
-                                   data for environmental and resource management. </p>
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <video class="ratio ratio-16x9" controls poster="static/video_frame.png">
-                                    <source src="{static 'videos/RyanLaffertyCapstonePresentation.mp4'}" alt="video/mp4">
-                                </video>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include 'projects/project_list.html' with projects=projects %}
         </div>
     </section>
     <!-- contact section -->

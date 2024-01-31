@@ -1,0 +1,20 @@
+{% for project in projects %}
+    <!-- {% if forloop.counter|divisibleby:2 %}
+        <div class="row mt-4">
+    {% endif %} -->
+    <div class="col-lg-6">
+        <div class="card">
+            <img class="card-img-top" src="{{ project.image.url }}" alt="Card image" style="width:100%">
+            <div class="card-body">
+                <h4 class="card-title">{{ project.title }}</h4>
+                <p class="card-text">{{ project.project_description }}</p>
+                <div class="text-center">
+                    <a href="{{ project.github_link }}" class="btn btn-success">Github</a>
+                    {% if project.other_link %}
+                    <a href="{{ project.other_link }}" class="btn btn-success">Link</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

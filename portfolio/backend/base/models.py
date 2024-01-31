@@ -19,6 +19,11 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     short_intro = models.CharField(max_length=200, blank=True, null=True)
     about = models.TextField(max_length=1000, null=True, blank=True)
+    profile_pic = models.ImageField(
+        null=True,
+        default="avatar.svg",
+        help_text="this is a profile picture that will be displayed in the about section"
+        )
     sex = models.CharField(choices=SEX_CHOICES, default=OTHER, max_length=100)
     date_birth = models.DateField(blank=True, null=True)
     city = models.CharField(null=True, blank=True, max_length=100)
@@ -80,11 +85,10 @@ class TechnicalSkill(models.Model):
     skill = models.CharField(
         max_length=40,
         help_text="This skill could be a language, framework or field specific skill")
-    skill_icon = models.FileField(
+    skill_icon = models.ImageField(
         blank=True,
         null=True,
-        default=None,
-        upload_to='static/images',
+        help_text="this is not a required field. If no image is provided then a text display of the skill will be used."
         )
     top_skill = models.BooleanField(default=True)
     
